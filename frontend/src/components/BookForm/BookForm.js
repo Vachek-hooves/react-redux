@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addBook } from '../../redux/books/actionCreators';
 import './BookForm.css';
 
 export default function BookForm() {
@@ -6,13 +8,24 @@ export default function BookForm() {
   const [author, setAuthor] = useState('');
   // const [formData, setFormData] = useState({});
 
+  // useDispatch - hook for action sending (it will be an object)
+  const dispatch = useDispatch();
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (title && author) {
       // dispatch action
-      console.log(title, author);
-      setAuthor('');
+      // console.log(title, author);
+      const book = {
+        title,
+        author,
+      };
+
+      // console.log(addBook(book));
+      dispatch(addBook(book));
+
+      setTitle('');
       setAuthor('');
     }
   };
