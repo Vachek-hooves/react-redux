@@ -12,10 +12,12 @@ export default function BookList() {
         <p>No available books</p>
       ) : (
         <ul>
-          {books.map((book, index) => (
-            <li key={index}>
+          {books.map((book, i) => (
+            <li key={book.id}>
               <div className="book-info">
-                <p>{++index}. Book title: {book.title}</p>
+                <p>
+                  {++i}. Book title: {book.title}
+                </p>
                 <p>
                   Book author: <strong>{book.author}</strong>
                 </p>
