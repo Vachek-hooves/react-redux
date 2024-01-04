@@ -24,6 +24,7 @@ export default function BookForm() {
         title,
         author,
         id: uuidv4(),
+        isFavorite: false,
       };
 
       // console.log(addBook(book));
@@ -39,7 +40,6 @@ export default function BookForm() {
     // // console.log(booksData);
     // const randomNumber = Math.floor(Math.random() * 100);
     // // console.log(randomNumber);
-
     // const randomBook = booksData[randomNumber];
     // // console.log(randomBook);
     // const book = {
@@ -48,10 +48,9 @@ export default function BookForm() {
     //   year: randomBook.year,
     //   id: uuidv4(),
     // };
-
     // dispatch(addBook(book));
 
-    // 
+    //
     // ! tutorial version
     const randomIndex = Math.floor(Math.random() * booksData.length);
     console.log(randomIndex);
@@ -59,10 +58,11 @@ export default function BookForm() {
     const randBookWithId = {
       ...randBook,
       id: uuidv4(),
+      isFavorite: false,
     };
-    
+
     console.log(randBookWithId);
-    dispatch(addBook(randBookWithId))
+    dispatch(addBook(randBookWithId));
   };
   return (
     <div className="app-block book-form">

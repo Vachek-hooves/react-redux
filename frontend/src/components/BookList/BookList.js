@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteBook } from '../../redux/books/actionCreators';
+import { deleteBook, toggleFavorite } from '../../redux/books/actionCreators';
+import { BsBookmarkStar, BsBookmarkStarFill } from 'react-icons/bs';
 import './BookList.css';
 
 export default function BookList() {
@@ -10,13 +11,17 @@ export default function BookList() {
 
   const handleDeleteBook = (id) => {
     // console.log(id);
-    console.log(deleteBook(id))
+    console.log(deleteBook(id));
     dispatch(deleteBook(id));
+  };
+
+  const toggleHandle = (id) => {
+    dispatch(toggleFavorite(id));
   };
 
   return (
     <div className="app-block book-list">
-      <h2>Add a Book List</h2>
+      <h2>Book List</h2>
       {books.length === 0 ? (
         <p>No available books</p>
       ) : (
@@ -24,17 +29,20 @@ export default function BookList() {
           {books.map((book, i) => (
             <li key={book.id}>
               <div className="book-info">
-                <p>
-                  {++i}. Book title: {book.title}
-                </p>
-                <p>
-                  Book author: <strong>{book.author}</strong>
-                </p>
-                <div className="book-actions">
-                  <button onClick={() => handleDeleteBook(book.id)}>
-                    delete book
-                  </button>
-                </div>
+                {++i}. title: {book.title} author:{' '}
+                <strong>{book.author}</strong>
+              </div>
+              <div className="book-actions">
+                <span onClick={() => toggleHandle(book.id)}>
+                  {book.isFavorite ? (
+                    <BsBookmarkStarFill className="star-icon" />
+                  ) : (
+                    <BsBookmarkStar className="star-icon" />
+                  )}
+                </span>
+                <button onClick={() => handleDeleteBook(book.id)}>
+                  delete book
+                </button>
               </div>
             </li>
           ))}
