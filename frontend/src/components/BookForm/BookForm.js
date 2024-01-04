@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 
+import createBookWithId from '../../utils/createBookWithId';
 import { addBook } from '../../redux/books/actionCreators';
 import booksData from '../../data/books.json';
 import './BookForm.css';
@@ -11,25 +12,17 @@ export default function BookForm() {
   const [author, setAuthor] = useState('');
   // const [formData, setFormData] = useState({});
 
-  // useDispatch - hook for action sending (it will be an object)
+  //* useDispatch - hook for action sending (it will be an object)
   const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (title && author) {
       // dispatch action
-      // console.log(title, author);
-      const book = {
-        title,
-        author,
-        id: uuidv4(),
-        isFavorite: false,
-      };
+      const book = createBookWithId({ author, title });
 
       // console.log(addBook(book));
       dispatch(addBook(book));
-
       setTitle('');
       setAuthor('');
     }
@@ -53,16 +46,11 @@ export default function BookForm() {
     //
     // ! tutorial version
     const randomIndex = Math.floor(Math.random() * booksData.length);
-    console.log(randomIndex);
-    const randBook = booksData[randomIndex];
-    const randBookWithId = {
-      ...randBook,
-      id: uuidv4(),
-      isFavorite: false,
-    };
-
-    console.log(randBookWithId);
-    dispatch(addBook(randBookWithId));
+    // console.log(randomIndex);
+    const randomBook = booksData[randomIndex];
+    const randomBookWithId = createBookWithId(randomBook);
+    // console.log(randomBookWithId);
+    dispatch(addBook(randomBookWithId));
   };
   return (
     <div className="app-block book-form">
