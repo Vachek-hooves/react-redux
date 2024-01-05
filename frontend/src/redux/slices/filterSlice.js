@@ -14,22 +14,28 @@ const filterSlice = createSlice({
       //   return { ...state, title: action.payload };
       state.title = action.payload;
     },
-    resetFilters: (state) => {
-      return initialState;
+    setAuthorFilter: (state, action) => {
+      state.author = action.payload;
+    },
+    resetFilters: (state, action) => {
+      return  initialState
     },
   },
 });
 // now filterSlice is an object which has properties "actions"
 console.log(filterSlice.actions);
 console.log(filterSlice.actions.setTitleFilter('test')); // 'test' - is a payload example like from a classic actionCreator
+console.log(filterSlice.actions.setAuthorFilter('author name'));
+console.log(filterSlice.actions.resetFilters());
 
 // * destructuring setTitleFilter (actionCreator) method from filterSlice
 
 export const { setTitleFilter } = filterSlice.actions;
 export const { resetFilters } = filterSlice.actions;
-console.log(filterSlice.actions.resetFilters)
+export const { setAuthorFilter } = filterSlice.actions;
 
-export const selectTitleFilter = (state) => state.filter.title;
+export const selectTitleFilter = (state) => state.filter.title; // to show result in input value attribute
+export const selectAuthorFilter = (state) => state.filter.author; // fulter - name: filter, author - properties what is changing in setAuthorFilter reducer.
 
 // export whole reducer to add it to store.
 export default filterSlice.reducer;
