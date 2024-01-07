@@ -45,6 +45,25 @@ export default function BookList() {
     return matchesAuthor && mathcesTitle && matchesFavorite;
   });
 
+  const highlightMatch = (text, filter) => {
+    // filter - will be value from one of inputs
+    if (!filter) return text; // if filter false (empty string) then return text without changes.
+
+    // if filter not empty then string need to chank & add class to some of them.
+    const regex = new RegExp(`(${filter})`, 'gi'); // highlight all strings. g- global means all text, i- case insensitive(registr doens`t metter)
+    console.log(text.split(regex));
+    return text.split(regex).map((textPart, i) => {
+      if (textPart.toLowerCase() === filter.toLowerCase()) {
+        return (
+          <span key={i} className="highlight">
+            {textPart}
+          </span>
+        );
+      }
+      return textPart;
+    });
+  };
+
   return (
     <div className="app-block book-list">
       <h2>Book List</h2>
@@ -55,8 +74,8 @@ export default function BookList() {
           {filteredBooks.map((book, i) => (
             <li key={book.id}>
               <div className="book-info">
-                {++i}. title: {book.title} author:{' '}
-                <strong>{book.author}</strong>
+                {++i}. title: {highlightMatch(book.title, titleFilter)} author:{' '}
+                <strong>{highlightMatch(book.author, authorFilter)}</strong>
               </div>
               <div className="book-actions">
                 <span onClick={() => toggleHandle(book.id)}>
