@@ -5,6 +5,7 @@ import './BookList.css';
 import {
   selectTitleFilter,
   selectAuthorFilter,
+  selectFavoriteFilter,
 } from '../../redux/slices/filterSlice';
 
 export default function BookList() {
@@ -12,7 +13,8 @@ export default function BookList() {
   const books = useSelector((state) => state.books);
   const titleFilter = useSelector(selectTitleFilter);
   const authorFilter = useSelector(selectAuthorFilter);
-  console.log(titleFilter, authorFilter);
+  const favoriteFilter = useSelector(selectFavoriteFilter);
+  // console.log('title filter -',titleFilter, 'author filter -', authorFilter);
 
   // useDispatch - hook for action sending (it will be an object)
   const dispatch = useDispatch();
@@ -25,6 +27,7 @@ export default function BookList() {
 
   const toggleHandle = (id) => {
     dispatch(toggleFavorite(id));
+    console.log(id);
   };
 
   const filteredBooks = books.filter((book) => {
@@ -34,11 +37,12 @@ export default function BookList() {
     const matchesAuthor = book.author
       .toLowerCase()
       .includes(authorFilter.toLowerCase());
+    const matchesFavorite = favoriteFilter ? book.isFavorite : book;
     // return mathcesTitle && matchesAuthor
-    console.log('author match',book.author.toLowerCase().includes(authorFilter.toLowerCase()));
-    console.log('title macth',book.title.toLowerCase().includes(titleFilter.toLowerCase()));
+    // console.log('author match',book.author.toLowerCase().includes(authorFilter.toLowerCase()));
+    // console.log('title macth',book.title.toLowerCase().includes(titleFilter.toLowerCase()));
     // console.log({ title: book.title, author: book.author, mathcesTitle ,matchesAuthor});
-    return  matchesAuthor && mathcesTitle;
+    return matchesAuthor && mathcesTitle && matchesFavorite;
   });
 
   return (
