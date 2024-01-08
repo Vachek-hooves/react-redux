@@ -74,8 +74,9 @@ export default function BookList() {
           {filteredBooks.map((book, i) => (
             <li key={book.id}>
               <div className="book-info">
-                {++i}. title: {highlightMatch(book.title, titleFilter)} author:{' '}
-                <strong>{highlightMatch(book.author, authorFilter)}</strong>
+                {++i}. title: {highlightMatch(book.title, titleFilter)}, author:{' '}
+                <strong>{highlightMatch(book.author, authorFilter)}</strong>{' '}
+                ({book.source})
               </div>
               <div className="book-actions">
                 <span onClick={() => toggleHandle(book.id)}>

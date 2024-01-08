@@ -20,7 +20,7 @@ export default function BookForm() {
     e.preventDefault();
     if (title && author) {
       // dispatch action
-      const book = createBookWithId({ author, title });
+      const book = createBookWithId({ author, title }, 'manual');
 
       // console.log(addBook(book));
       dispatch(addBook(book));
@@ -49,22 +49,22 @@ export default function BookForm() {
     const randomIndex = Math.floor(Math.random() * booksData.length);
     // console.log(randomIndex);
     const randomBook = booksData[randomIndex];
-    const randomBookWithId = createBookWithId(randomBook);
+    // const randomBookWithId = createBookWithId(randomBook);
     // console.log(randomBookWithId);
-    dispatch(addBook(randomBookWithId));
+    dispatch(addBook(createBookWithId(randomBook, 'random')));
   };
 
   const handleAddRandomBookViaApi = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/randm-book');
+      const response = await axios.get('http://localhost:4000/random-book');
       if (response?.data?.title && response?.data?.author) {
-        dispatch(addBook(createBookWithId(response.data)));
+        dispatch(addBook(createBookWithId(response.data, 'API')));
       }
     } catch (error) {
       return console.log(error);
     }
   };
-  
+
   return (
     <div className="app-block book-form">
       <h2>Add a New Book</h2>
