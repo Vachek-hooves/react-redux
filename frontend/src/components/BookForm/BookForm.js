@@ -54,7 +54,8 @@ export default function BookForm() {
     dispatch(addBook(createBookWithId(randomBook, 'random')));
   };
 
-  const handleAddRandomBookViaApi = async () => {
+  // ! thuck function - working with REDUX asynchroniously
+  const thunckFunction = async (dispatch, getState) => {
     try {
       const response = await axios.get('http://localhost:4000/random-book');
       if (response?.data?.title && response?.data?.author) {
@@ -63,6 +64,10 @@ export default function BookForm() {
     } catch (error) {
       return console.log(error);
     }
+  };
+
+  const handleAddRandomBookViaApi = () => {
+    dispatch(thunckFunction);
   };
 
   return (
