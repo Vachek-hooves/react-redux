@@ -2,7 +2,11 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import createBookWithId from '../../utils/createBookWithId';
-import { addBook, thunckFunction } from '../../redux/slices/booksSlice';
+import {
+  addBook,
+  thunckFunction,
+  fetchBook,
+} from '../../redux/slices/booksSlice';
 import booksData from '../../data/books.json';
 import './BookForm.css';
 
@@ -19,7 +23,6 @@ export default function BookForm() {
       // dispatch action
       const book = createBookWithId({ author, title }, 'manual');
 
-      // console.log(addBook(book));
       dispatch(addBook(book));
       setTitle('');
       setAuthor('');
@@ -44,15 +47,14 @@ export default function BookForm() {
     //
     // ! tutorial version
     const randomIndex = Math.floor(Math.random() * booksData.length);
-    // console.log(randomIndex);
     const randomBook = booksData[randomIndex];
-    // const randomBookWithId = createBookWithId(randomBook);
-    // console.log(randomBookWithId);
     dispatch(addBook(createBookWithId(randomBook, 'random')));
   };
 
   // // ! thuck function - working with REDUX asynchroniously
   // const thunckFunction = async (dispatch, getState) => {
+  // dispatch - send action to store
+  // getState - to get current state
   //   try {
   //     const response = await axios.get('http://localhost:4000/random-book');
   //     if (response?.data?.title && response?.data?.author) {
@@ -64,7 +66,7 @@ export default function BookForm() {
   // };
 
   const handleAddRandomBookViaApi = () => {
-    dispatch(thunckFunction);
+    dispatch(fetchBook());
   };
 
   return (
