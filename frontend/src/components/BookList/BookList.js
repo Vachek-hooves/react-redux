@@ -1,6 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteBook, toggleFavorite } from '../../redux/books/actionCreators';
 import { BsBookmarkStar, BsBookmarkStarFill } from 'react-icons/bs';
+import {
+  deleteBook,
+  toggleFavorite,
+  selectBooks,
+} from '../../redux/slices/booksSlice';
 import './BookList.css';
 import {
   selectTitleFilter,
@@ -10,7 +14,7 @@ import {
 
 export default function BookList() {
   // useSelector - hook for on change state watching
-  const books = useSelector((state) => state.books);
+  const books = useSelector(selectBooks);
   const titleFilter = useSelector(selectTitleFilter);
   const authorFilter = useSelector(selectAuthorFilter);
   const favoriteFilter = useSelector(selectFavoriteFilter);
@@ -75,8 +79,8 @@ export default function BookList() {
             <li key={book.id}>
               <div className="book-info">
                 {++i}. title: {highlightMatch(book.title, titleFilter)}, author:{' '}
-                <strong>{highlightMatch(book.author, authorFilter)}</strong>{' '}
-                ({book.source})
+                <strong>{highlightMatch(book.author, authorFilter)}</strong> (
+                {book.source})
               </div>
               <div className="book-actions">
                 <span onClick={() => toggleHandle(book.id)}>

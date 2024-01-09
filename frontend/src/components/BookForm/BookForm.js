@@ -1,17 +1,14 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
-// import { v4 as uuidv4 } from 'uuid';
 
 import createBookWithId from '../../utils/createBookWithId';
-import { addBook } from '../../redux/books/actionCreators';
+import { addBook, thunckFunction } from '../../redux/slices/booksSlice';
 import booksData from '../../data/books.json';
 import './BookForm.css';
 
 export default function BookForm() {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
-  // const [formData, setFormData] = useState({});
 
   //* useDispatch - hook for action sending (it will be an object)
   const dispatch = useDispatch();
@@ -54,17 +51,17 @@ export default function BookForm() {
     dispatch(addBook(createBookWithId(randomBook, 'random')));
   };
 
-  // ! thuck function - working with REDUX asynchroniously
-  const thunckFunction = async (dispatch, getState) => {
-    try {
-      const response = await axios.get('http://localhost:4000/random-book');
-      if (response?.data?.title && response?.data?.author) {
-        dispatch(addBook(createBookWithId(response.data, 'API')));
-      }
-    } catch (error) {
-      return console.log(error);
-    }
-  };
+  // // ! thuck function - working with REDUX asynchroniously
+  // const thunckFunction = async (dispatch, getState) => {
+  //   try {
+  //     const response = await axios.get('http://localhost:4000/random-book');
+  //     if (response?.data?.title && response?.data?.author) {
+  //       dispatch(addBook(createBookWithId(response.data, 'API')));
+  //     }
+  //   } catch (error) {
+  //     return console.log(error);
+  //   }
+  // };
 
   const handleAddRandomBookViaApi = () => {
     dispatch(thunckFunction);
