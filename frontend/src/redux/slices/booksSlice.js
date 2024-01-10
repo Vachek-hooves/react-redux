@@ -3,7 +3,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import createBookWithId from '../../utils/createBookWithId';
 import { setError } from './errorSlice';
 
-const initialState = [];
+const initialState = {
+  books: [],
+  isLoadingViaAPI: false,
+};
 
 // NOTES:
 // 'books/fetchBook' - books- bookSlice name. fetchBook - name of what function will do.
@@ -16,7 +19,9 @@ export const fetchBook = createAsyncThunk(
       return response.data;
     } catch (error) {
       thunkAPI.dispatch(setError(error.message));
-      throw error; // ! to make promisse rejected. (prevent fulfill)
+      // throw error; // ! to make promisse rejected. (prevent fulfill)
+      // or
+      throw thunkAPI.rejectWithValue(error)
     }
   }
 );
@@ -27,11 +32,14 @@ const booksSlice = createSlice({
   reducers: {
     addBook: (state, action) => {
       // action creator
-      state.push(action.payload);
+      state.books.push(action.payload);
       // return [...state, action.payload] // this will create new state.
     },
     deleteBook: (state, action) => {
-      return state.filter((book) => book.id !== action.payload);
+      return {
+        ...state,
+        books: state.books.filter((book) => book.id !== action.payload),
+      };
       // another way
       //   const index = state.findIndex((book) => (book.id === action.payload));
       //   if (index !== -1) {
@@ -39,7 +47,7 @@ const booksSlice = createSlice({
       //   }
     },
     toggleFavorite: (state, action) => {
-      state.forEach((book) => {
+      state.books.forEach((book) => {
         if (book.id === action.payload) {
           book.isFavorite = !book.isFavorite;
         }
@@ -51,22 +59,39 @@ const booksSlice = createSlice({
     },
   },
   // OPTION 1
-  // extraReducers: {
-  // computed property
-  //   [fetchBook.fulfilled]: (state, action) => {
-  //     if (action.payload.title && action.payload.author) {
-  //       state.push(createBookWithId(action.payload, 'API'));
-  //     }
-  //   },
-
-  // OPTION 2
   // to integrate async thunk function need to use extraReducers
   extraReducers: (builder) => {
-    builder.addCase(fetchBook.fulfilled, (state, action) => {
-      if (action.payload.title && action.payload.author) {
-        state.push(createBookWithId(action.payload, 'API'));
-      }
+    builder.addCase(fetchBook.pending, (state) => {
+      state.isLoadingViaAPI = true;
     });
+    builder.addCase(fetchBook.fulfilled, (state, action) => {
+      state.isLoadingViaAPI = false;
+      if (action.payload.title && action.payload.author) {
+        state.books.push(createBookWithId(action.payload, 'API'));
+      }
+      builder.addCase(fetchBook.rejected, (state) => {
+        state.isLoadingViaAPI = false;
+      });
+    });
+    // OPTION 2 (depricated)
+    // extraReducers: {
+    //   [fetchBook.pending]: (state) => {
+    //     state.isLoadingViaAPI = true;
+    //   },
+
+    //   // computed property
+    //   [fetchBook.fulfilled]: (state, action) => {
+    //     state.isLoadingViaAPI = false;
+    //     if (action.payload.title && action.payload.author) {
+    //       state.books.push(createBookWithId(action.payload, 'API'));
+    //     }
+    //   },
+
+    //   [fetchBook.rejected]: (state) => {
+    //     state.isLoadingViaAPI = false;
+    //   },
+    // },
+
     // action in case promise rejected
     // builder.addCase(fetchBook.rejected, (state, action) => {
     //   console.log(action);
@@ -91,6 +116,7 @@ const booksSlice = createSlice({
 export const { addBook, deleteBook, toggleFavorite } = booksSlice.actions;
 
 // * destructuring state condition
-export const selectBooks = (state) => state.books;
+export const selectBooks = (state) => state.books.books;
+export const selectIsLoadingViaAPI = (state) => state.books.isLoadingViaAPI;
 
 export default booksSlice.reducer;
