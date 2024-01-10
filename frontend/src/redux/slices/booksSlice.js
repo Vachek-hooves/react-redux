@@ -7,7 +7,7 @@ const initialState = [];
 // NOTES:
 // 'books/fetchBook' - books- bookSlice name. fetchBook - name of what function will do.
 export const fetchBook = createAsyncThunk('books/fetchBook', async () => {
-  const response = await axios.get('http://localhost:400/random-book');
+  const response = await axios.get('http://localhost:4000/random-book');
   return response.data;
 });
 

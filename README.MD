@@ -9,3 +9,6 @@ initialize GIT:
 /api
 - npm  init -y
 - npm intall express cors
+
+/npm
+-react-toastify - npm install --save react-toastify

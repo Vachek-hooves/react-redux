@@ -16,6 +16,8 @@ const errorSlice = createSlice({
   },
 });
 
+// console.log(errorSlice.actions.setError('error accured'))
+
 // action creators
 export const { setError, clearError } = errorSlice.actions;
 

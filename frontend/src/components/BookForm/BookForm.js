@@ -1,16 +1,12 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-
 import createBookWithId from '../../utils/createBookWithId';
-import {
-  addBook,
-  thunckFunction,
-  fetchBook,
-} from '../../redux/slices/booksSlice';
+import { addBook, fetchBook } from '../../redux/slices/booksSlice';
+import { setError } from '../../redux/slices/errorSlice';
 import booksData from '../../data/books.json';
 import './BookForm.css';
 
-export default function BookForm() {
+const BookForm = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
 
@@ -19,13 +15,16 @@ export default function BookForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (title && author) {
       // dispatch action
       const book = createBookWithId({ author, title }, 'manual');
-
       dispatch(addBook(book));
       setTitle('');
       setAuthor('');
+    } else {
+      // set (send to store) action payload for setError
+      dispatch(setError('title & author can`t be empty'));
     }
   };
 
@@ -101,4 +100,5 @@ export default function BookForm() {
       </form>
     </div>
   );
-}
+};
+export default BookForm;
