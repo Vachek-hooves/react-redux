@@ -1,15 +1,25 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import createBookWithId from '../../utils/createBookWithId';
+import { setError } from './errorSlice';
 
 const initialState = [];
 
 // NOTES:
 // 'books/fetchBook' - books- bookSlice name. fetchBook - name of what function will do.
-export const fetchBook = createAsyncThunk('books/fetchBook', async () => {
-  const response = await axios.get('http://localhost:4000/random-book');
-  return response.data;
-});
+export const fetchBook = createAsyncThunk(
+  'books/fetchBook',
+  async (url, thunkAPI) => {
+    // console.log(thunkAPI);
+    try {
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      thunkAPI.dispatch(setError(error.message));
+      throw error; // ! to make promisse rejected. (prevent fulfill)
+    }
+  }
+);
 
 const booksSlice = createSlice({
   name: 'books',
@@ -47,7 +57,7 @@ const booksSlice = createSlice({
         state.push(createBookWithId(action.payload, 'API'));
       }
     });
-    // action in case promise rejected 
+    // action in case promise rejected
     // builder.addCase(fetchBook.rejected, (state, action) => {
     //   console.log(action);
     //   state.errorMsg = action.error.message;
