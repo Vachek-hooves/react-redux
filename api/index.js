@@ -7,11 +7,22 @@ const app = express();
 
 app.use(cors()); // apply cors to prevent error: Cross-Origin-Resorce-Shering. When frontend sends request to backend.
 
-// when request proccesing
-app.get('/random-book', (req, res) => {
+function getRendomBook() {
   const randomIndex = Math.floor(Math.random() * booksData.length); // create fn to generate random number depend on array length
   const randomBook = booksData[randomIndex]; // choose random book depent on previously generated number
-  res.json(randomBook); // return book on response in json type.
+  return randomBook;
+}
+
+// when request proccesing
+
+app.get('/random-book', (req, res) => {
+  res.json(getRendomBook()); // return book on response in json type.
+});
+
+app.get('/random-book-delayed', (req, res) => {
+  setTimeout(() => {
+    res.json(getRendomBook());
+  }, 2000);
 });
 
 const port = process.env.PORT || 4000;

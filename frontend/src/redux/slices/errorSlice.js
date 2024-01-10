@@ -23,6 +23,5 @@ export const { setError, clearError } = errorSlice.actions;
 
 // selector
 export const selectErrorMessage = (state) => state.error;
-console.log(errorSlice)
 
 export default errorSlice.reducer;
